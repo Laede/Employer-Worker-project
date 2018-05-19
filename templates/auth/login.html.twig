@@ -3,9 +3,8 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-    <div class="container">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="offset-md-4 col-md-4 col-sm-12">
                 {% for message in app.flashes('success') %}
                     <div class="alert alert-success" role="alert">
                         {{ message }}
@@ -23,5 +22,4 @@
                 {{ form_end(form) }}
             </div>
         </div>
-    </div>
 {% endblock %}
