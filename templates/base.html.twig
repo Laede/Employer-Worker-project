@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
-        {# TODO: add bootstrap css #}
+        <link rel="stylesheet" type="text/css" href="{{ asset('build/css/app.css') }}" />
     {% endblock %}
 </head>
 <body>
-{{ include('navbar/navbar.html.twig') }}
+{{ include('navbar.html.twig') }}
 <div class="container">
 {% block body %}
 
 {% endblock %}
 </div>
 {% block javascripts %}
-    {# TODO: add bootstrap js #}
+
+    <script src="{{ asset('build/js/app.js') }}"></script>
 {% endblock %}
 </body>
 </html>

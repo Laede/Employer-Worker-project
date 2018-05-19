@@ -5,14 +5,44 @@ namespace App\Controller;
 
 
 use App\Entity\User;
+use App\Form\LoginType;
 use App\Form\RegisterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class RegisterController extends Controller
+class AuthController extends Controller
 {
+
+    /**
+     * @Route("/login", name="login")
+     */
+    public function login()
+    {
+        $authenticationUtils = $this->get('security.authentication_utils');
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastLogin = $authenticationUtils->getLastUsername();
+
+        $form = $this->createForm(LoginType::class, [
+            'email' => $lastLogin,
+        ]);
+
+
+
+        return $this->render('auth/login.html.twig',[
+            'error' => $error,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logout()
+    {
+
+    }
 
     /**
      * @Route("/register", name="register")
@@ -39,7 +69,7 @@ class RegisterController extends Controller
         }
 
         return $this->render(
-            'registration/registration.html.twig', array(
+            'auth/registration.html.twig', array(
                 'form' => $form->createView()
             )
         );
