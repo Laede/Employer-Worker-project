@@ -1,7 +1,7 @@
 version: "3.1"
 services:
     mysql:
-        image: mysql:5.6
+        image: mysql:5.7
         working_dir: /application
         volumes:
             - .:/application
@@ -12,6 +12,19 @@ services:
             - MYSQL_PASSWORD=dbpw
         ports:
             - "8002:3306"
+
+    mysql-test:
+        image: mysql:5.7
+        working_dir: /application
+        volumes:
+            - .:/application
+        environment:
+            - MYSQL_ROOT_PASSWORD=dbpw
+            - MYSQL_DATABASE=symfony
+            - MYSQL_USER=dbuser
+            - MYSQL_PASSWORD=dbpw
+        ports:
+            - "8003:3306"
 
     webserver:
         image: nginx:alpine
@@ -40,3 +53,4 @@ services:
             - .:/application
         ports:
             - "8081:80"
+
