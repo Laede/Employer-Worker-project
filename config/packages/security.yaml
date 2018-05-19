@@ -1,13 +1,45 @@
 security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+        Symfony\Component\Security\Core\User\User: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        chain_provider:
+            chain:
+                providers: [in_memory, our_users]
+        in_memory:
+            memory:
+                users:
+                    admin:
+                        password: $2y$13$94Oe/nzby6hGA/df/U1/Zup3RkBhYARAs8xidLcR1S.877Cnl7SeG
+                        roles: 'ROLE_ADMIN'
+
+        our_users:
+            entity: { class: App\Entity\User, property: email }
+
+    role_hierarchy:
+            ROLE_ADMIN: [ROLE_EMPLOYER, ROLE_WORKER, ROLE_ALLOWED_TO_SWITCH]
+            ROLE_EMPLOYER: [ROLE_EMPLOYER, ROLE_WORKER]
+            ROLE_WORKER: [ROLE_WORKER]
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
+            anonymous: ~
+            form_login:
+                login_path: login
+                check_path: login
+                username_parameter: login[email]
+                password_parameter: login[password]
+            logout:
+                path: /logout
+                target: /
+            pattern:    ^/
+            http_basic: ~
+            provider: chain_provider
 
             # activate different ways to authenticate
 

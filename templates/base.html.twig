@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        {# TODO: add bootstrap css #}
+    {% endblock %}
+</head>
+<body>
+{{ include('navbar/navbar.html.twig') }}
+<div class="container">
+{% block body %}
+
+{% endblock %}
+</div>
+{% block javascripts %}
+    {# TODO: add bootstrap js #}
+{% endblock %}
+</body>
 </html>

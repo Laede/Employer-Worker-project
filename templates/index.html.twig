@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if is_granted("ROLE_ADMIN") %}
+        Welcome Admin
+    {% elseif is_granted("ROLE_EMPLOYER") or is_granted("ROLE_WORKER") %}
+        Welcome {{ app.user.email }}
+    {% else %}
+        Welcome!
+    {% endif %}
+{% endblock %}

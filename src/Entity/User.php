@@ -5,11 +5,15 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"email"}, message="Email all ready exists!")
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -20,16 +24,20 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
     private $email;
 
@@ -92,6 +100,11 @@ class User
         return $this;
     }
 
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -116,14 +129,26 @@ class User
         return $this;
     }
 
-    public function getRoles(): ?string
+    public function getRoles(): ?array
     {
-        return $this->roles;
+        return in_array($this->roles,['ROLE_EMPLOYER', 'ROLE_WORKER'])?[$this->roles]:['ROLE_WORKER'];
     }
 
     public function setRoles(string $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->roles;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->roles = $role;
 
         return $this;
     }
@@ -181,5 +206,33 @@ class User
         }
 
         return $this;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function eraseCredentials()
+    {
+        return null;
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->email,
+            $this->password,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->email,
+            $this->password,
+            ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 }
