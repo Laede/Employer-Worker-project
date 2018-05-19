@@ -20,7 +20,7 @@ services:
             - .:/application
         environment:
             - MYSQL_ROOT_PASSWORD=dbpw
-            - MYSQL_DATABASE=symfony
+            - MYSQL_DATABASE=symfony-test
             - MYSQL_USER=dbuser
             - MYSQL_PASSWORD=dbpw
         ports:

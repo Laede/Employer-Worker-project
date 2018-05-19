@@ -1,24 +1,41 @@
 var Encore = require('@symfony/webpack-encore');
 
 Encore
-    // the project directory where compiled assets will be stored
+// the project directory where compiled assets will be stored
     .setOutputPath('public/build/')
+
     // the public path used by the web server to access the previous directory
     .setPublicPath('/build')
+
+    // Delete compiled files on rebuild
     .cleanupOutputBeforeBuild()
+
+    // Add source maps (the ability to trace back minified file to source) to minified files
     .enableSourceMaps(!Encore.isProduction())
-    // uncomment to create hashed filenames (e.g. app.abc123.css)
-    // .enableVersioning(Encore.isProduction())
 
-    // uncomment to define the assets of the project
-    // .addEntry('js/app', './assets/js/app.js')
-    // .addStyleEntry('css/app', './assets/css/app.scss')
+    // uncomment to create hashed filenames (e.g. app.abc123.css) to break cache
+    .enableVersioning(Encore.isProduction())
 
-    // uncomment if you use Sass/SCSS files
-    // .enableSassLoader()
+    // Create shared entry for all
+    .createSharedEntry('vendor', [
+        'jquery',
+        'bootstrap-sass/assets/stylesheets/_bootstrap.scss',
+        'bootswatch/dist/materia/bootstrap.css'
+    ])
 
-    // uncomment for legacy applications that require $/jQuery as a global variable
-    // .autoProvidejQuery()
+    // JS of the project
+    .addEntry('js/app', './assets/js/app.js')
+
+
+    // Css
+    .addStyleEntry('css/app', './assets/css/app.scss')
+
+
+    // Using SASS
+    .enableSassLoader()
+
+    // Using JS - needed for bootstrap
+    .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();
