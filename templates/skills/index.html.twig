@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Skills index{% endblock %}
+
+{% block body %}
+    <h1>Skills index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for skill in skills %}
+            <tr>
+                <td>{{ skill.id }}</td>
+                <td>{{ skill.name }}</td>
+                <td>
+                    <form method="post" action="{{ path('skills_delete', {'id': skill.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ skill.id) }}">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('skills_new') }}">Create new</a>
+{% endblock %}
