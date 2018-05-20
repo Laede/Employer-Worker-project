@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Worker;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Repository\WorkerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,12 +22,13 @@ class UserController extends Controller
     /**
      * @Route("/", name="user_index", methods="GET")
      */
-    public function show(): Response
+    public function show(WorkerRepository $repository): Response
     {
         $user = $this->getUser();
-
+        $worker = $repository->findOneBy(['user' => $user]);
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'worker' => $worker,
         ]);
     }
 

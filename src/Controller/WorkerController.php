@@ -15,42 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class WorkerController extends Controller
 {
-    /**
-     * @Route("/", name="worker_index", methods="GET")
-     */
-    public function index(WorkerRepository $workerRepository): Response
-    {
-        return $this->render('worker/index.html.twig', ['workers' => $workerRepository->findAll()]);
-    }
 
     /**
-     * @Route("/new", name="worker_new", methods="GET|POST")
+     * @Route("/", name="worker_show", methods="GET")
      */
-    public function new(Request $request): Response
+    public function show(WorkerRepository $repository): Response
     {
-        $worker = new Worker();
-        $form = $this->createForm(WorkerType::class, $worker);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($worker);
-            $em->flush();
-
-            return $this->redirectToRoute('worker_index');
-        }
-
-        return $this->render('worker/new.html.twig', [
-            'worker' => $worker,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="worker_show", methods="GET")
-     */
-    public function show(Worker $worker): Response
-    {
+        $worker = $repository->findOneBy(['user' => $this->getUser()]);
         return $this->render('worker/show.html.twig', ['worker' => $worker]);
     }
 
@@ -63,7 +34,8 @@ class WorkerController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getDoctrine()->getManager()
+                ->flush();
 
             return $this->redirectToRoute('worker_edit', ['id' => $worker->getId()]);
         }
@@ -74,17 +46,5 @@ class WorkerController extends Controller
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="worker_delete", methods="DELETE")
-     */
-    public function delete(Request $request, Worker $worker): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$worker->getId(), $request->request->get('_token'))) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($worker);
-            $em->flush();
-        }
 
-        return $this->redirectToRoute('worker_index');
-    }
 }

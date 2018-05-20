@@ -15,9 +15,21 @@
                 <th>Created</th>
                 <td>{{ user.created ? user.created|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Skills</th>
+                <td>   {% for skill in worker.skills %}
+                        {{ skill.name }}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>CV</th>
+                <td>{{ worker.cv }}</td>
+            </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('user_edit') }}">edit</a>
+    <a class="btn btn-primary" href="{{ path('user_edit') }}">Edit Personal Info</a><br/><br/>
+    <a class="btn btn-primary" href="{{ path('worker_edit', {'id': worker.id}) }}">Edit Skills & CV</a>
 
 {% endblock %}
