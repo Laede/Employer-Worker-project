@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Entity\User;
+use App\Entity\Worker;
 use App\Form\LoginType;
 use App\Form\RegisterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -61,6 +62,13 @@ class AuthController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
+
+            if($user->getRole() === 'ROLE_WORKER')
+            {
+                $worker = new Worker();
+                $worker->setUser($user);
+                $em->persist($worker);
+            }
             $em->flush();
 
             $this->addFlash('success', 'Registration successful!');
