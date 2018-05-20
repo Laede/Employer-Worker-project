@@ -22,10 +22,6 @@ class ProjectType extends AbstractType
             ->add('crewCount')
             ->add('budget')
             ->add('registerDeadline')
-//            ->add('user', EntityType::class, array(
-//                'class' => User::class,
-//                'choice_label' => 'email'
-//            ))
             ->add('skills', EntityType::class, [
                 'class' => Skills::class,
                 'multiple' => true,
