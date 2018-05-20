@@ -4,7 +4,12 @@
             <ul class="navbar-nav bd-navbar-nav flex-row">
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('home') }}">Home</a>
+                </li>>
+                {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ path('skills_index') }}">Skills</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link " href="{{ path('user_index') }}">User</a>
                 </li>

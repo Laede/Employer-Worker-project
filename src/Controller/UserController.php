@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Skills;
 use App\Entity\User;
+use App\Entity\Worker;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,53 +17,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends Controller
 {
+
     /**
      * @Route("/", name="user_index", methods="GET")
      */
-    public function index(UserRepository $userRepository): Response
+    public function show(): Response
     {
-        return $this->render('user/index.html.twig', ['users' => $userRepository->findAll()]);
-    }
+        $user = $this->getUser();
 
-    /**
-     * @Route("/new", name="user_new", methods="GET|POST")
-     */
-    public function new(Request $request): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            return $this->redirectToRoute('user_index');
-        }
-
-        return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="user_show", methods="GET")
-     */
-    public function show(User $user, Skills $skills): Response
-    {
         return $this->render('user/show.html.twig', [
             'user' => $user,
-            'skills' => $skills,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="user_edit", methods="GET|POST")
+     * @Route("/edit", name="user_edit", methods="GET|POST")
      */
-    public function edit(Request $request, User $user): Response
+    public function edit(Request $request): Response
     {
+        $user = $this->getUser();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -78,17 +51,4 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="user_delete", methods="DELETE")
-     */
-    public function delete(Request $request, User $user): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($user);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('user_index');
-    }
 }
