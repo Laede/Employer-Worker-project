@@ -55,7 +55,7 @@ class Project
     private $registerDeadline;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Skills", mappedBy="project")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Skills")
      */
     private $skills;
 
@@ -171,7 +171,6 @@ class Project
     {
         if (!$this->skills->contains($skill)) {
             $this->skills[] = $skill;
-            $skill->addProject($this);
         }
 
         return $this;
@@ -181,7 +180,6 @@ class Project
     {
         if ($this->skills->contains($skill)) {
             $this->skills->removeElement($skill);
-            $skill->removeProject($this);
         }
 
         return $this;
@@ -216,10 +214,5 @@ class Project
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->getUser();
     }
 }

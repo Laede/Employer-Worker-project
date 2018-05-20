@@ -30,7 +30,7 @@ class Worker
     private $cv;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Skills", mappedBy="worker")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Skills")
      */
     private $skills;
 
@@ -86,7 +86,6 @@ class Worker
     {
         if (!$this->skills->contains($skill)) {
             $this->skills[] = $skill;
-            $skill->addWorker($this);
         }
 
         return $this;
@@ -96,7 +95,6 @@ class Worker
     {
         if ($this->skills->contains($skill)) {
             $this->skills->removeElement($skill);
-            $skill->removeWorker($this);
         }
 
         return $this;

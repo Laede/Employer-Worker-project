@@ -23,22 +23,6 @@ class Skills
      */
     private $name;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Worker", inversedBy="skills")
-     */
-    private $worker;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Project", inversedBy="skills")
-     */
-    private $project;
-
-    public function __construct()
-    {
-        $this->worker = new ArrayCollection();
-        $this->project = new ArrayCollection();
-    }
-
     public function getId()
     {
         return $this->id;
@@ -56,55 +40,4 @@ class Skills
         return $this;
     }
 
-    /**
-     * @return Collection|Worker[]
-     */
-    public function getWorker(): Collection
-    {
-        return $this->worker;
-    }
-
-    public function addWorker(Worker $worker): self
-    {
-        if (!$this->worker->contains($worker)) {
-            $this->worker[] = $worker;
-        }
-
-        return $this;
-    }
-
-    public function removeWorker(Worker $worker): self
-    {
-        if ($this->worker->contains($worker)) {
-            $this->worker->removeElement($worker);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Project[]
-     */
-    public function getProject(): Collection
-    {
-        return $this->project;
-    }
-
-    public function addProject(Project $project): self
-    {
-        if (!$this->project->contains($project)) {
-            $this->project[] = $project;
-        }
-
-        return $this;
-    }
-
-    public function removeProject(Project $project): self
-    {
-        if ($this->project->contains($project)) {
-            $this->project->removeElement($project);
-        }
-
-        return $this;
-    }
 }
