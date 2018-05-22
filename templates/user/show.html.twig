@@ -25,7 +25,13 @@
             </tr>
             <tr>
                 <th>CV</th>
-                <td><a target="_blank" href="{{ path('my_cv') }}">{{ user.fullName }}.pdf</a></td>
+                <td>
+                    {% if worker.cv %}
+                    <a target="_blank" href="{{ path('my_cv') }}">{{ user.fullName }}.pdf</a>
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
             </tr>
         {% endif %}
         </tbody>
