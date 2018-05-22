@@ -52,5 +52,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/user, roles: [ROLE_EMPLOYER,ROLE_WORKER] }
+        - { path: ^/worker, roles: ROLE_WORKER }
         - { path: ^/skills, roles: ROLE_ADMIN }
         - { path: ^/project, roles: ROLE_EMPLOYER }

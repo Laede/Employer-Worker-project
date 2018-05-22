@@ -15,6 +15,7 @@
                 <th>Created</th>
                 <td>{{ user.created ? user.created|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            {% if worker %}
             <tr>
                 <th>Skills</th>
                 <td>   {% for skill in worker.skills %}
@@ -24,12 +25,15 @@
             </tr>
             <tr>
                 <th>CV</th>
-                <td>{{ worker.cv }}</td>
+                <td><a target="_blank" href="{{ path('my_cv') }}">{{ user.fullName }}.pdf</a></td>
             </tr>
+        {% endif %}
         </tbody>
     </table>
 
     <a class="btn btn-primary" href="{{ path('user_edit') }}">Edit Personal Info</a><br/><br/>
-    <a class="btn btn-primary" href="{{ path('worker_edit', {'id': worker.id}) }}">Edit Skills & CV</a>
+    {% if worker %}
+    <a class="btn btn-primary" href="{{ path('worker_edit') }}">Edit Skills & CV</a>
+    {% endif %}
 
 {% endblock %}
