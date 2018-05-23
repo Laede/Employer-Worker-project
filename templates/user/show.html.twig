@@ -33,13 +33,16 @@
                     {% endif %}
                 </td>
             </tr>
-        {% endif %}
+            {% endif %}
         </tbody>
     </table>
 
-    <a class="btn btn-primary" href="{{ path('user_edit') }}">Edit Personal Info</a><br/><br/>
+    <a class="btn btn-primary" href="{{ path('user_edit') }}">Edit Personal Info</a>
     {% if worker %}
     <a class="btn btn-primary" href="{{ path('worker_edit') }}">Edit Skills & CV</a>
+        {% if worker.applies %}
+            <a class="btn btn-warning" href="{{ path('worker_history') }}">Apply history</a>
+        {% endif %}
     {% endif %}
 
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Apply;
 use App\Entity\Project;
 use App\Form\WorkerType;
 use App\Repository\ProjectRepository;
@@ -95,7 +96,22 @@ class WorkerController extends Controller
             return $this->redirectToRoute('worker_edit');
         }
 
-        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAll()]);
+        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAvailable()]);
+    }
+
+    /**
+     * @Route("/history/", name="worker_history", methods="GET")
+     */
+    public function history(ProjectRepository $projectRepository): Response
+    {
+        $user = $this->getUser();
+
+        if(!$this->workerService->cvUploaded($user)) {
+            $this->addFlash('warning', 'Please upload your CV and select your skills first!');
+            return $this->redirectToRoute('worker_edit');
+        }
+
+        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findApplied($this->workerService->getWorker($user))]);
     }
 
 
@@ -110,6 +126,37 @@ class WorkerController extends Controller
         }
 
         return $this->render('project/show.html.twig', ['project' => $project]);
+    }
+
+
+    /**
+     * @Route("/projects/{id}/apply", name="worker_project_apply", methods="GET")
+     */
+    public function applyProject(Project $project): Response
+    {
+        $this->denyAccessUnlessGranted('project_not_applied_yet', $project, 'Already applied');
+        $this->denyAccessUnlessGranted('project_not_expired', $project, 'Project expired');
+        $this->denyAccessUnlessGranted('project_not_full', $project, 'Project full');
+
+        $user = $this->getUser();
+
+        if(!$this->workerService->cvUploaded($user)) {
+            $this->addFlash('warning', 'Please upload your CV and select your skills first!');
+            return $this->redirectToRoute('worker_edit');
+        }
+
+        $apply = new Apply();
+        $apply->setWorker($this->workerService->getWorker($user));
+        $apply->setProject($project);
+        $apply->setStatus('new');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($apply);
+        $em->flush();
+
+        $this->addFlash('success', 'Successfully applied! Now you can write a message.');
+
+        return $this->redirectToRoute('worker_project_show',['id' => $project->getId()]);
     }
 
 
