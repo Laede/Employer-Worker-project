@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Worker;
+use App\Entity\Project;
 use App\Form\WorkerType;
-use App\Repository\WorkerRepository;
+use App\Repository\ProjectRepository;
 use App\Service\CV;
+use App\Service\WorkerService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +18,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class WorkerController extends Controller
 {
+    private $workerService;
+
+    public function __construct(WorkerService $workerService)
+    {
+        $this->workerService = $workerService;
+    }
 
     /**
-     * @Route("/", name="worker_edit", methods="GET|POST")
+     * @Route("/edit/", name="worker_edit", methods="GET|POST")
      */
-    public function edit(Request $request, WorkerRepository $repository, CV $cvUploader): Response
+    public function edit(Request $request, CV $cvUploader): Response
     {
         $user = $this->getUser();
-        $worker = $repository->findOneBy(['user' => $user]);
+        $worker = $this->workerService->getWorker($user);
 
         $oldFile = $worker->getCv();
         if($oldFile) {
@@ -63,10 +70,10 @@ class WorkerController extends Controller
     /**
      * @Route("/my-cv", name="my_cv", methods="GET|POST")
      */
-    public function my_cv(CV $CV, WorkerRepository $repository)
+    public function my_cv(CV $CV)
     {
         $user = $this->getUser();
-        $worker = $repository->findOneBy(['user' => $user]);
+        $worker = $this->workerService->getWorker($user);
 
         if($worker && $worker->getCv()) {
             $CV->show(
@@ -77,6 +84,35 @@ class WorkerController extends Controller
             throw $this->createNotFoundException('CV Not Found');
         }
     }
+
+    /**
+     * @Route("/projects/", name="worker_projects", methods="GET")
+     */
+    public function projects(ProjectRepository $projectRepository): Response
+    {
+        if(!$this->workerService->cvUploaded($this->getUser())) {
+            $this->addFlash('warning', 'Please upload your CV and select your skills first!');
+            return $this->redirectToRoute('worker_edit');
+        }
+
+        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAll()]);
+    }
+
+
+    /**
+     * @Route("/projects/{id}", name="worker_project_show", methods="GET")
+     */
+    public function showProject(Project $project): Response
+    {
+        if(!$this->workerService->cvUploaded($this->getUser())) {
+            $this->addFlash('warning', 'Please upload your CV and select your skills first!');
+            return $this->redirectToRoute('worker_edit');
+        }
+
+        return $this->render('project/show.html.twig', ['project' => $project]);
+    }
+
+
 
 
 }
