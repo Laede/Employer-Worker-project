@@ -29,13 +29,14 @@ class ProjectController extends Controller
     public function new(Request $request): Response
     {
         $project = new Project();
-        $user = $this->getUser();
-        $project->setUser($user);
 
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $project->setUser($user);
+
             $em = $this->getDoctrine()->getManager();
 
             $em->persist($project);

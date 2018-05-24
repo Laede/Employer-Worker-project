@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\WorkerRepository")
@@ -26,6 +27,7 @@ class Worker
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(mimeTypes={ "application/pdf" })
      */
     private $cv;
 
@@ -62,12 +64,12 @@ class Worker
         return $this;
     }
 
-    public function getCv(): ?string
+    public function getCv()
     {
         return $this->cv;
     }
 
-    public function setCv(?string $cv): self
+    public function setCv($cv): self
     {
         $this->cv = $cv;
 
