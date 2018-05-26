@@ -29,31 +29,16 @@ class WorkerController extends Controller
     /**
      * @Route("/edit/", name="worker_edit", methods="GET|POST")
      */
-    public function edit(Request $request, CV $cvUploader): Response
+    public function edit(Request $request): Response
     {
         $user = $this->getUser();
         $worker = $this->workerService->getWorker($user);
 
-        $oldFile = $worker->getCv();
-        if($oldFile) {
-            $worker->setCv(
-                new File($this->getParameter('cv_directory').'/'.$worker->getCv())
-            );
-        }
+
         $form = $this->createForm(WorkerType::class, $worker);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($file = $worker->getCV()) {
-                $fileName = $cvUploader->upload($file);
-                if($oldFile) {
-                    unlink($this->getParameter('cv_directory').'/'.$oldFile);
-                }
-                $worker->setCv($fileName);
-            } else {
-                $worker->setCv($oldFile);
-            }
-
             $this->getDoctrine()->getManager()
                 ->flush();
 
