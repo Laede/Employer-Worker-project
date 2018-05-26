@@ -54,22 +54,18 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}", name="project_show", methods="GET")
      */
-    public function show(ProjectRepository $repository): Response
+    public function show(Project $project): Response
     {
-        $user = $this->getUser();
-        $project = $repository->findOneBy(['user' => $user]);
+        $this->denyAccessUnlessGranted('is_project_author', $project);
         return $this->render('project/show.html.twig', ['project' => $project]);
-
     }
 
     /**
      * @Route("/{id}/edit", name="project_edit", methods="GET|POST")
      */
-    public function edit(Request $request, ProjectRepository $repository): Response
+    public function edit(Request $request, Project $project): Response
     {
-        $user = $this->getUser();
-        $project = $repository->findOneBy(['user' => $user]);
-
+        $this->denyAccessUnlessGranted('is_project_author', $project);
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
@@ -88,11 +84,9 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}", name="project_delete", methods="DELETE")
      */
-    public function delete(Request $request, ProjectRepository $repository): Response
+    public function delete(Request $request, Project $project): Response
     {
-        $user = $this->getUser();
-        $project = $repository->findOneBy(['user' => $user]);
-
+        $this->denyAccessUnlessGranted('is_project_author',$project);
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($project);
