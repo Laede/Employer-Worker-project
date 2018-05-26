@@ -6,18 +6,18 @@
                     <a class="nav-link " href="{{ path('home') }}">Home</a>
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('skills_index') }}">Skills</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{ path('skills_index') }}">Skills</a>
+                    </li>
                 {% endif %}
                 {% if is_granted('ROLE_EMPLOYER') %}
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('project_index') }}">Projects</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{ path('project_index') }}">Projects</a>
+                    </li>
                 {% elseif is_granted('ROLE_WORKER') %}
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('worker_projects') }}">Projects</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{ path('worker_projects') }}">Projects</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>

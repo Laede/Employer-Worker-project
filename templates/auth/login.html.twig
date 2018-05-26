@@ -3,8 +3,11 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-        <div class="row">
-            <div class="offset-md-4 col-md-4 col-sm-12">
+        <div class="row" id="top">
+            <div class="col-md-4 col-sm-12">
+                <h3 class="font-weight-bold">To start using this site, you must register, and if you do, please login</h3>
+            </div>
+            <div class="col-md-6 col-sm-12">
                 {% for message in app.flashes('success') %}
                     <div class="alert alert-success" role="alert">
                         {{ message }}

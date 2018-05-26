@@ -1,3 +1,32 @@
 @import '~bootstrap/scss/bootstrap';
+@import "~font-awesome/css/font-awesome.css";
+@import url('https://fonts.googleapis.com/css?family=Raleway');
 
 header + div.container{padding-top:30px;}
+
+body {
+  background:linear-gradient(0deg,rgba(192,192,192,0.3),rgba(192,192,192,0.3)),
+  url(http://www.teacherstern.com/wp-content/uploads/business-networking.jpg) no-repeat;
+  background-size: cover;
+  height: 100%;
+  font-family: 'Raleway', sans-serif;
+
+}
+#top {
+  margin-top: 155px;
+}
+
+label {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+legend {
+  font-size: 24px !important;
+  font-weight: bold;
+}
+
+
+button {
+  font-size: 24px !important;
+}
