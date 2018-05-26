@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apply{% endblock %}
+
+{% block body %}
+    <h1>Apply</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Name</th>
+            <td>{{apply.worker.user.fullName}}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ apply.worker.user.email }}</td>
+        </tr>
+        <tr>
+            <th>CV</th>
+            <td><a target="_blank" href="{{ path('apply_cv_show', {'id': apply.id}) }}">CV</a></td>
+        </tr>
+        <tr>
+            <th>Action</th>
+            <td>
+                <form action="" method="post">
+                    {% if apply.status != 'accepted' %}
+                    <button type="submit" name="status" value="1" class="btn btn-success">Accept</button>
+                    {% endif %}
+                    {% if apply.status != 'declined' %}
+                    <button type="submit" name="status" value="0" class="btn btn-danger">Decline</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    {% include 'project/messages.html.twig' with {'messages': apply.messages} %}
+
+    <a href="{{ path('project_show', {'id': apply.project.id}) }}">back to project</a>
+{% endblock %}

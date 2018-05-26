@@ -2,10 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Apply;
+use App\Entity\Messages;
 use App\Entity\Project;
+use App\Form\MessagesType;
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
+use App\Service\ApplyService;
+use App\Service\MessagesService;
+use App\Service\CV;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,10 +61,50 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}", name="project_show", methods="GET")
      */
-    public function show(Project $project): Response
+    public function show(Project $project, ApplyService $applyService): Response
     {
         $this->denyAccessUnlessGranted('is_project_author', $project);
-        return $this->render('project/show.html.twig', ['project' => $project]);
+        $applies = $applyService->groupApplies($project->getApplies());
+        return $this->render('project/show.html.twig', ['project' => $project, 'applies' => $applies]);
+    }
+
+    /**
+     * @Route("/{project}/apply/{id}", name="apply_show", methods="GET|POST")
+     */
+    public function apply(Request $request, Apply $apply, MessagesService $messagesService, ApplyService $applyService): Response
+    {
+        $this->denyAccessUnlessGranted('view_apply', $apply);
+
+        if(!is_null($request->get('status'))) {
+            $applyService->changeStatus($apply, $request->get('status'));
+            return $this->redirectToRoute('apply_show', ['id' => $apply->getId(), 'project' => $apply->getProject()->getId()]);
+        }
+
+        $message = new Messages();
+        $form = $this->createForm(MessagesType::class, $message);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $messagesService->saveMessage($message, $this->getUser(), $apply);
+            return $this->redirectToRoute('apply_show', ['id' => $apply->getId(), 'project' => $apply->getProject()->getId()]);
+        }
+
+        return $this->render('project/apply.html.twig', [
+            'apply' => $apply,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/cv/{id}", name="apply_cv_show", methods="GET")
+     */
+    public function getCV(Apply $apply, CV $CV): BinaryFileResponse
+    {
+        $this->denyAccessUnlessGranted('view_apply_cv', $apply);
+        return $CV->show(
+            $this->getParameter('cv_directory').'/'.$apply->getWorker()->getCv(),
+            $apply->getWorker()->getUser()->getFullName().'.pdf'
+        );
     }
 
     /**

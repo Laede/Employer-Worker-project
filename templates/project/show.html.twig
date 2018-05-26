@@ -53,8 +53,37 @@
     {% elseif is_granted('ROLE_WORKER') %}
         {% if is_granted('worker_apply', project) %}
         <a href="{{ path('worker_project_apply', {'id': project.id}) }}" class="btn btn-success">Apply</a>
-        {% elseif not is_granted('project_not_applied_yet', project) %}
-            {# TODO: messages system #}
+        {% elseif not is_granted('project_not_applied_yet', project) and apply is defined %}
+            {% include 'project/messages.html.twig' with {'messages': apply.messages} %}
+            <a href="{{ path('worker_history') }}">Go back</a>
         {% endif %}
+    {% endif %}
+
+    {% if is_granted('is_project_author', project) and project.applies %}
+    {% for status,applies in applies %}
+        {% if applies %}
+        <h3>{{ status }}</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>CV</th>
+                <th>View</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for apply in applies %}
+            <tr>
+                <td>{{ apply.worker.user.fullName }}</td>
+                <td>{{ apply.worker.user.email }}</td>
+                <td><a target="_blank" href="{{ path('apply_cv_show', {'id': apply.id}) }}">CV</a></td>
+                <td><a href="{{ path('apply_show', {'id': apply.id, 'project': project.id}) }}">Show</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% endfor %}
     {% endif %}
 {% endblock %}

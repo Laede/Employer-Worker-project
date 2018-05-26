@@ -1,0 +1,18 @@
+<h2>Messages</h2>
+{% if messages %}
+<table class="table">
+    <tbody>
+    {% for message in messages %}
+        <tr>
+            <td>{{ message.user.fullName }}</td>
+            <td>{{ message.timestamp ? message.timestamp|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ message.message }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

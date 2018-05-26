@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Project index{% endblock %}
+
+{% block body %}
+    <h1>Project index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>StartDate</th>
+                <th>CrewCount</th>
+                <th>Budget</th>
+                <th>RegisterDeadline</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for apply in applies %}
+            {% set project = apply.project %}
+            <tr>
+                <td>{{ project.name }}</td>
+                <td>{{ project.description }}</td>
+                <td>{{ project.startDate ? project.startDate|date('Y-m-d') : '' }}</td>
+                <td>{{ project.crewCount }}</td>
+                <td>{{ project.budget }}</td>
+                <td>{{ project.registerDeadline ? project.registerDeadline|date('Y-m-d') : '' }}</td>
+                <td>
+                    {% if is_granted('ROLE_EMPLOYER') %}
+                        <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
+                        <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                    {% else %}
+                        <a href="{{ path('worker_apply', {'id': apply.id}) }}">show</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_EMPLOYER') %}
+    <a href="{{ path('project_new') }}">Create new</a>
+    {% endif %}
+{% endblock %}

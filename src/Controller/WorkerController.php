@@ -3,13 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Apply;
+use App\Entity\Messages;
 use App\Entity\Project;
+use App\Form\MessagesType;
 use App\Form\WorkerType;
 use App\Repository\ProjectRepository;
 use App\Service\CV;
+use App\Service\MessagesService;
 use App\Service\WorkerService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -87,16 +89,39 @@ class WorkerController extends Controller
     /**
      * @Route("/history/", name="worker_history", methods="GET")
      */
-    public function history(ProjectRepository $projectRepository): Response
+    public function history(): Response
     {
         $user = $this->getUser();
-
-        if(!$this->workerService->cvUploaded($user)) {
+        $worker = $this->workerService->getWorker($user);
+        if(!$worker->getCv()) {
             $this->addFlash('warning', 'Please upload your CV and select your skills first!');
             return $this->redirectToRoute('worker_edit');
         }
 
-        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findApplied($this->workerService->getWorker($user))]);
+        return $this->render('worker/history.html.twig', ['applies' => $worker->getApplies()]);
+    }
+
+    /**
+     * @Route("/apply/{id}", name="worker_apply", methods="GET|POST")
+     */
+    public function apply(Request $request, Apply $apply, MessagesService $messagesService): Response
+    {
+        $this->denyAccessUnlessGranted('view_apply', $apply);
+
+        $message = new Messages();
+        $form = $this->createForm(MessagesType::class, $message);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $messagesService->saveMessage($message, $this->getUser(), $apply);
+            return $this->redirectToRoute('worker_apply',['id' => $apply->getId()]);
+        }
+
+        return $this->render('project/show.html.twig', [
+            'project' => $apply->getProject(),
+            'apply' => $apply,
+            'form' => $form->createView(),
+        ]);
     }
 
 

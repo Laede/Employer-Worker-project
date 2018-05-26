@@ -2,10 +2,9 @@
 
 namespace App\Service;
 
-use App\Entity\User;
-use App\Entity\Worker;
-use App\Repository\WorkerRepository;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 class CV
@@ -33,9 +32,11 @@ class CV
 
     public function show($location, $filename = 'CV.pdf')
     {
-        header('Content-type:application/pdf');
-        header('Content-Disposition:inline;filename="'.$filename.'"');
-        readfile($location);
-        die;
+        $response = new BinaryFileResponse($location);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_INLINE,
+            $filename
+        );
+        return $response;
     }
 }
