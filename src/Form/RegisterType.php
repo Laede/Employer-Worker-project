@@ -27,8 +27,8 @@ class RegisterType extends AbstractType
             ))
             ->add('role',ChoiceType::class, [
                 'choices' => [
-                    'Employer'  => 'ROLE_EMPLOYER',
-                    'Worker'    => 'ROLE_WORKER',
+                    'Worker'    => 0,
+                    'Employer'  => 1,
                 ],
                 'expanded' => true,
             ])

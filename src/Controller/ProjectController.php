@@ -29,13 +29,14 @@ class ProjectController extends Controller
     public function new(Request $request): Response
     {
         $project = new Project();
-        $user = $this->getUser();
-        $project->setUser($user);
 
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $project->setUser($user);
+
             $em = $this->getDoctrine()->getManager();
 
             $em->persist($project);
@@ -55,6 +56,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project): Response
     {
+        $this->denyAccessUnlessGranted('is_project_author', $project);
         return $this->render('project/show.html.twig', ['project' => $project]);
     }
 
@@ -63,6 +65,7 @@ class ProjectController extends Controller
      */
     public function edit(Request $request, Project $project): Response
     {
+        $this->denyAccessUnlessGranted('is_project_author', $project);
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
@@ -83,6 +86,7 @@ class ProjectController extends Controller
      */
     public function delete(Request $request, Project $project): Response
     {
+        $this->denyAccessUnlessGranted('is_project_author',$project);
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($project);

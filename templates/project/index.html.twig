@@ -27,17 +27,23 @@
                 <td>{{ project.budget }}</td>
                 <td>{{ project.registerDeadline ? project.registerDeadline|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
-                    <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                    {% if is_granted('ROLE_EMPLOYER') %}
+                        <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
+                        <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                    {% else %}
+                        <a href="{{ path('worker_project_show', {'id': project.id}) }}">show</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="7">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
+    {% if is_granted('ROLE_EMPLOYER') %}
     <a href="{{ path('project_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

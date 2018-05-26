@@ -29,8 +29,6 @@ class AuthController extends Controller
             'email' => $lastLogin,
         ]);
 
-
-
         return $this->render('auth/login.html.twig',[
             'error' => $error,
             'form' => $form->createView(),
@@ -57,18 +55,22 @@ class AuthController extends Controller
         if($form->isSubmitted() && $form->isValid()){
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
-            $user->setRoles($user->getRole());
             $user->setCreated(new \DateTimeImmutable());
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
 
-            if($user->getRole() === 'ROLE_WORKER')
+            if($user->getRole() === '1')
             {
+                $user->setRoles('ROLE_EMPLOYER');
+            } else
+            {
+                $user->setRoles('ROLE_WORKER');
                 $worker = new Worker();
                 $worker->setUser($user);
                 $em->persist($worker);
             }
+
+            $em->persist($user);
             $em->flush();
 
             $this->addFlash('success', 'Registration successful!');
