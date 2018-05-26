@@ -1,10 +1,12 @@
 {% block navbar %}
-    <header class="navbar navbar-expand bg-dark navbar-dark flex-column flex-md-row bd-navbar">
-        <div class="navbar-nav-scroll">
-            <ul class="navbar-nav bd-navbar-nav flex-row">
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('home') }}">Home</a>
-                </li>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="">ApWorks!</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav navbar-nav ml-auto">
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
                         <a class="nav-link " href="{{ path('skills_index') }}">Skills</a>
@@ -19,30 +21,32 @@
                         <a class="nav-link " href="{{ path('worker_projects') }}">Projects</a>
                     </li>
                 {% endif %}
+
+                {% if is_granted('ROLE_EMPLOYER') or is_granted('ROLE_WORKER') %}
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{ path('user_index') }}">
+                            <i class="fa fa-user"></i>
+                            Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">{{ app.user.email }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('logout') }}">
+                            <i class="fa fa-sign-out"></i>
+                            Logout
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('register') }}">Register</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
-        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-            {% if is_granted('ROLE_EMPLOYER') or is_granted('ROLE_WORKER') %}
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ path('user_index') }}">
-                        <i class="fa fa-user"></i>
-                        Profile
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('logout') }}">
-                        <i class="fa fa-logout"></i>
-                        Logout
-                    </a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('login') }}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('register') }}">Register</a>
-                </li>
-            {% endif %}
-        </ul>
-    </header>
+    </nav>
 {% endblock %}

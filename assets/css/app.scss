@@ -2,7 +2,6 @@
 @import "~font-awesome/css/font-awesome.css";
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 
-header + div.container{padding-top:30px;}
 
 body {
   background:linear-gradient(0deg,rgba(192,192,192,0.3),rgba(192,192,192,0.3)),
@@ -29,4 +28,8 @@ legend {
 
 button {
   font-size: 24px !important;
+}
+
+#navbarSupportedContent {
+  padding: 10px 75px 10px 10px;
 }
