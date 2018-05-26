@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Apply;
 use App\Entity\Project;
+use App\Entity\Worker;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -22,12 +23,7 @@ class ProjectRepository extends ServiceEntityRepository
 
     public function findAvailable()
     {
-        return $this->createQueryBuilder('p')
-            ->leftJoin(Apply::class, 'a', 'WITH', 'p.id = a.project AND a.status = \'accepted\'')
-            ->andWhere('p.registerDeadline >= :date')
-            ->setParameter('date', date('Y-m-d'))
-            ->andHaving('count(a.id) < p.crewCount')
-            ->groupBy('p.id')
+        return $this->getQueryBuilder()
             ->getQuery()
             ->getResult()
         ;
@@ -45,32 +41,25 @@ class ProjectRepository extends ServiceEntityRepository
         ;
     }
 
-//    /**
-//     * @return Project[] Returns an array of Project objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function findBySkills($skills)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->getQueryBuilder()
+            ->leftjoin('p.skills','s','WITH', 's NOT IN (:skills)')
+            ->setParameter('skills', $skills)
+            ->andHaving('count(s) = 0')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Project
+    private function getQueryBuilder()
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+            ->leftJoin(Apply::class, 'a', 'WITH', 'p.id = a.project AND a.status = \'accepted\'')
+            ->andWhere('p.registerDeadline >= :date')
+            ->setParameter('date', date('Y-m-d'))
+            ->andHaving('count(a.id) < p.crewCount')
+            ->groupBy('p.id')
         ;
     }
-    */
 }

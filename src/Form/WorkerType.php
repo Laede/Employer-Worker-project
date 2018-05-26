@@ -19,6 +19,7 @@ class WorkerType extends AbstractType
             ->add('cv', FileType::class, [
                 'label' => 'CV (PDF file)',
                 'required' => false,
+                'data_class' => null,
             ])
             ->add('skills', EntityType::class, [
                 'class' => Skills::class,
