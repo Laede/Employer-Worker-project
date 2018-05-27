@@ -1,4 +1,3 @@
-<h2>Messages</h2>
 {% if messages %}
 <table class="table">
     <tbody>
@@ -14,5 +13,7 @@
 {% endif %}
 {{ form_start(form) }}
 {{ form_widget(form) }}
-<button class="btn">{{ button_label|default('Save') }}</button>
+<button class="btn btn-success btn-sm">{{ button_label|default('Send') }}</button>
+<br/>
+<br/>
 {{ form_end(form) }}
