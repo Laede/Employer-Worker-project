@@ -22,10 +22,10 @@ class ProjectType extends AbstractType
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'js-datepicker'
+                    'class' => 'js-datepicker datepicker'
                 ],
-                'html5' => false,
-                'data' => new \DateTime()
+                    'html5' => false,
+                    'data' => new \DateTime()
                 ]
             )
             ->add('crewCount')
@@ -33,7 +33,7 @@ class ProjectType extends AbstractType
             ->add('registerDeadline', DateType::class, [
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'js-datepicker'
+                    'class' => 'js-datepicker',
                 ],
                 'html5' => false,
                 'data' => new \DateTime("+5 day")])

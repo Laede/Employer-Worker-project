@@ -21,11 +21,14 @@ Encore
         'bootstrap/dist/css/bootstrap.css',
         'bootstrap/dist/js/bootstrap.js',
         'bootstrap-select-v4/dist/css/bootstrap-select.css',
-        'bootstrap-select-v4/dist/js/bootstrap-select.js'
+        'bootstrap-select-v4/dist/js/bootstrap-select.js',
+        'bootstrap-datepicker/dist/css/bootstrap-datepicker.css',
+        'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'
     ])
 
     // JS of the project
     .addEntry('js/app', './assets/js/app.js')
+    .addEntry('js/datepicker', './assets/js/datepicker.js')
 
 
     // Css

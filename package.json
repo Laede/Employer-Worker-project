@@ -11,7 +11,8 @@
         "font-family": "^0.2.0",
         "font-awesome": "^4.7.0",
         "quicksand": "^0.0.1",
-        "bootstrap-select-v4": "^1.12.4"
+        "bootstrap-select-v4": "^1.12.4",
+        "bootstrap-datepicker": "^1.8.0"
     },
     "license": "UNLICENSED",
     "private": true,

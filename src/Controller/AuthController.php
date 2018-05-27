@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller;
-
 
 use App\Entity\User;
 use App\Entity\Worker;
@@ -15,7 +13,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AuthController extends Controller
 {
-
     /**
      * @Route("/login", name="login")
      */

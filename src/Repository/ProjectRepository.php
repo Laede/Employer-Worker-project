@@ -43,7 +43,7 @@ class ProjectRepository extends ServiceEntityRepository
             ->andHaving('count(a.id) < p.crewCount')
             ->groupBy('p.id')
         ;
-        foreach($filters as $key => $filter) {
+        foreach($filters as $filter) {
             if(method_exists($this,$filter['method'])) {
                 $this->{$filter['method']}($qb, $filter['value']);
             }

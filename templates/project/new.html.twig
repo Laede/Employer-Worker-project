@@ -2,23 +2,10 @@
 
 {% block title %}New Project{% endblock %}
 
-{% block stylesheets %}
-{{ parent() }}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" rel="stylesheet"/>
-{% endblock %}
-
-{% block javascript %}
+{% block javascripts %}
     {{ parent() }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.js-datepicker').datepicker({
-                format: 'yyyy-mm-dd'
-            });
-        });
-    </script>
+    <script src="{{ asset('build/js/datepicker.js') }}"></script>
 {% endblock %}
-
 
 {% block body %}
     <h1>Create new Project</h1>
