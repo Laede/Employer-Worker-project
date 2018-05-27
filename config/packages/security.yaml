@@ -39,3 +39,6 @@ security:
         - { path: ^/user, roles: [ROLE_EMPLOYER,ROLE_WORKER] }
         - { path: ^/worker, roles: ROLE_WORKER }
         - { path: ^/project, roles: ROLE_EMPLOYER }
+        - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, role: ROLE_USER }
