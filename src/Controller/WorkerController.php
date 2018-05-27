@@ -92,7 +92,6 @@ class WorkerController extends Controller
             $this->addFlash('warning', 'Please upload your CV and select your skills first!');
             return $this->redirectToRoute('worker_edit');
         }
-
         return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAvailable()]);
     }
 
