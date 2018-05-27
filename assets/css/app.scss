@@ -1,4 +1,3 @@
-@import '~bootstrap/scss/bootstrap';
 @import "~font-awesome/css/font-awesome.css";
 @import url('https://fonts.googleapis.com/css?family=Raleway');
 
@@ -38,11 +37,6 @@ button {
   margin-top: 40px !important;
 }
 
-span{
-  font-size: 20px;
-  padding-left: 120px;
-}
-
 span a {
   color: white;
   font-size: 25px
@@ -55,4 +49,13 @@ span a {
 }
 .card {
   background-color: #f1ecece3;
+}
+
+
+#filter .input-group{
+  padding:0 10px;
+}
+
+#filter button[data-id=input-skills]{
+  font-size:16px!important;
 }

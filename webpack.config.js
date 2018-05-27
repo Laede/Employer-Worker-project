@@ -16,6 +16,14 @@ Encore
     // uncomment to create hashed filenames (e.g. app.abc123.css) to break cache
     .enableVersioning(Encore.isProduction())
 
+    .createSharedEntry('vendor', [
+        'jquery',
+        'bootstrap/dist/css/bootstrap.css',
+        'bootstrap/dist/js/bootstrap.js',
+        'bootstrap-select-v4/dist/css/bootstrap-select.css',
+        'bootstrap-select-v4/dist/js/bootstrap-select.js'
+    ])
+
     // JS of the project
     .addEntry('js/app', './assets/js/app.js')
 

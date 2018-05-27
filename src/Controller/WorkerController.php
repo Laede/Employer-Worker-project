@@ -8,6 +8,7 @@ use App\Entity\Project;
 use App\Form\MessagesType;
 use App\Form\WorkerType;
 use App\Repository\ProjectRepository;
+use App\Repository\SkillsRepository;
 use App\Service\CV;
 use App\Service\MessagesService;
 use App\Service\WorkerService;
@@ -86,13 +87,34 @@ class WorkerController extends Controller
     /**
      * @Route("/projects/", name="worker_projects", methods="GET")
      */
-    public function projects(ProjectRepository $projectRepository): Response
+    public function projects(ProjectRepository $projectRepository, Request $request, SkillsRepository $skillsRepository): Response
     {
-        if(!$this->workerService->cvUploaded($this->getUser())) {
+        $user = $this->getUser();
+        $skills = $skillsRepository->findAll();
+        $filter2method = [
+            'skills'        => 'filterSkills',
+            'my_skills'     => 'filterSkills',
+            'budget_from'   => 'filterBudgetFrom',
+            'budget_to'     => 'filterBudgetTo'
+        ];
+        $filters = [];
+        foreach($request->query as $key => $item) {
+            if($item && isset($filter2method[$key])) {
+                $filters[$key] = [
+                    'filter'    => $key,
+                    'method'    => $filter2method[$key],
+                    'value'     => $key === 'my_skills'?$this->workerService->getWorker($user)->getSkills():$item,
+                ];
+            }
+        }
+        $projects = $projectRepository->findByFilters($filters);
+
+        if(!$this->workerService->cvUploaded($user)) {
             $this->addFlash('warning', 'Please upload your CV and select your skills first!');
             return $this->redirectToRoute('worker_edit');
         }
-        return $this->render('project/index.html.twig', ['projects' => $projectRepository->findAvailable()]);
+
+        return $this->render('project/index.html.twig', ['projects' => $projects, 'filters' => $filters, 'skills' => $skills]);
     }
 
     /**

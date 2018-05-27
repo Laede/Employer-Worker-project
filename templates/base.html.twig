@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('build/vendor.css') }}"/>
         <link rel="stylesheet" type="text/css" href="{{ asset('build/css/app.css') }}"/>
     {% endblock %}
 </head>
@@ -27,10 +28,9 @@
     {% endblock %}
 </div>
 {% block javascripts %}
-
+    <script src="{{ asset('build/manifest.js') }}"></script>
     <script src="{{ asset('build/js/app.js') }}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="{{ asset('build/vendor.js') }}"></script>
 {% endblock %}
 </body>
 </html>

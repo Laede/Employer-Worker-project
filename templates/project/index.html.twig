@@ -10,6 +10,41 @@
             {% endif %}
         </span>
     </h1>
+    {% if is_granted('ROLE_WORKER') and filters is defined %}
+        <form action="{{ path('worker_projects') }}" method="get" class="card card-block bg-faded" id="filter">
+            <div class="form-row card-body">
+                <div class="col-md-4">
+                    <label for="input-skills">Skills</label>
+                    <select class="form-control selectpicker" name="skills[]" id="input-skills" multiple data-live-search="true" data-width="100%">
+                        {% for skill in skills %}
+                        <option value="{{ skill.id }}"{% if filters.skills is defined and skill.id in filters.skills.value %} selected{% endif %}>{{ skill.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="input-skills">&nbsp;</label>
+                    <div>
+                        <input type="checkbox" name="my_skills" value="1" id="input-my-skills"{% if filters.my_skills is defined %} checked{% endif %} />
+                        <label for="input-my-skills">My skills</label>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="input-budget">Budget</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><div class="input-group-text">From:</div></div>
+                        <input type="number" min="0" name="budget_from" class="form-control" id="input-budget" placeholder="From" value="{{ filters.budget_from is defined?filters.budget_from.value }}" />
+                        <div class="input-group-append input-group-prepend"><div class="input-group-text">To:</div></div>
+                        <input type="number" min="0" name="budget_to" class="form-control" id="input-budget" placeholder="To" value="{{ filters.budget_to is defined?filters.budget_to.value }}" />
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    <label>&nbsp;</label>
+                    <input type="submit" class="btn btn-primary mb-2 form-control" value="Filter" />
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </form>
+    {% endif %}
 
     <table class="table table-hover">
         <thead>
@@ -45,7 +80,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">There is no projects</td>
+                <td colspan="6">There is no projects</td>
             </tr>
         {% endfor %}
         </tbody>

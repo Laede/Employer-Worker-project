@@ -6,6 +6,7 @@ use App\Entity\Apply;
 use App\Entity\Project;
 use App\Entity\Worker;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -21,14 +22,6 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
-    public function findAvailable()
-    {
-        return $this->getQueryBuilder()
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
     public function findApplied($worker)
     {
         return $this->createQueryBuilder('p')
@@ -41,25 +34,40 @@ class ProjectRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findBySkills($skills)
+    public function findByFilters($filters)
     {
-        return $this->getQueryBuilder()
-            ->leftjoin('p.skills','s','WITH', 's NOT IN (:skills)')
-            ->setParameter('skills', $skills)
-            ->andHaving('count(s) = 0')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    private function getQueryBuilder()
-    {
-        return $this->createQueryBuilder('p')
+        $qb = $this->createQueryBuilder('p')
             ->leftJoin(Apply::class, 'a', 'WITH', 'p.id = a.project AND a.status = \'accepted\'')
             ->andWhere('p.registerDeadline >= :date')
             ->setParameter('date', date('Y-m-d'))
             ->andHaving('count(a.id) < p.crewCount')
             ->groupBy('p.id')
         ;
+        foreach($filters as $key => $filter) {
+            if(method_exists($this,$filter['method'])) {
+                $this->{$filter['method']}($qb, $filter['value']);
+            }
+        }
+        return $qb->getQuery()->getResult();
+    }
+
+    private function filterBudgetFrom(QueryBuilder $qb, $budget)
+    {
+        return $qb->andWhere('p.budget >= :budget')
+            ->setParameter('budget', $budget);
+    }
+
+    private function filterBudgetTo(QueryBuilder $qb, $budget)
+    {
+        return $qb->andWhere('p.budget <= :budget')
+            ->setParameter('budget', $budget);
+    }
+
+    private function filterSkills(QueryBuilder $qb, $skills)
+    {
+        $alias = uniqid('s');
+        return $qb->leftjoin('p.skills',$alias,'WITH', $alias.' NOT IN (:skills)')
+            ->setParameter('skills', $skills)
+            ->andHaving('count('.$alias.') = 0');
     }
 }
