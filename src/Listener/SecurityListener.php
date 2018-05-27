@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Roma
- * Date: 27/05/2018
- * Time: 11:03
- */
 
 namespace App\Listener;
 

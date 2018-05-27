@@ -11,7 +11,6 @@ class WorkerService
 {
     private $workerRepository;
 
-    
     public function __construct(WorkerRepository $workerRepository)
     {
         $this->workerRepository = $workerRepository;
