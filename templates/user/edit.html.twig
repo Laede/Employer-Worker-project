@@ -3,12 +3,18 @@
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
-
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('user_index') }}" class=" btn btn-primary" style="font-size: 21px;"><i
-                class="fa fa-undo" aria-hidden="true"></i></a>
+<div class="card">
+    <div class="card-header">
+        <h1>Edit User</h1>
+    </div>
+    <div class="card-body">
+        {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+    </div>
+    <div class="card-footer">
+        <a href="{{ path('user_index') }}" class=" btn btn-primary" style="font-size: 21px;"><i
+                    class="fa fa-undo" aria-hidden="true"></i></a>
+    </div>
+</div>
 
 
 {% endblock %}
