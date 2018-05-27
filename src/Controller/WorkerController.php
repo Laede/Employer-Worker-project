@@ -91,22 +91,7 @@ class WorkerController extends Controller
     {
         $user = $this->getUser();
         $skills = $skillsRepository->findAll();
-        $filter2method = [
-            'skills'        => 'filterSkills',
-            'my_skills'     => 'filterSkills',
-            'budget_from'   => 'filterBudgetFrom',
-            'budget_to'     => 'filterBudgetTo'
-        ];
-        $filters = [];
-        foreach($request->query as $key => $item) {
-            if($item && isset($filter2method[$key])) {
-                $filters[$key] = [
-                    'filter'    => $key,
-                    'method'    => $filter2method[$key],
-                    'value'     => $key === 'my_skills'?$this->workerService->getWorker($user)->getSkills():$item,
-                ];
-            }
-        }
+        $filters = $this->workerService->proceedFilters($request, $user);
         $projects = $projectRepository->findByFilters($filters);
 
         if(!$this->workerService->cvUploaded($user)) {

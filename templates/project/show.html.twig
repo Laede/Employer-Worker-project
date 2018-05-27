@@ -42,8 +42,6 @@
                        style="font-size: 21px; margin-left: 1px">Apply</a>
                 {% elseif not is_granted('project_not_applied_yet', project) and apply is defined %}
                     {% include 'project/messages.html.twig' with {'messages': apply.messages} %}
-                    <a href="{{ path('worker_history') }}" class="card-link btn btn-primary" style="font-size: 21px;"><i
-                                class="fa fa-undo" aria-hidden="true"></i></a>
                 {% endif %}
             {% endif %}
         </div>

@@ -7,6 +7,8 @@
 
     {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a class="btn btn-primary" href="{{ path('user_index') }}">back to profile</a>
+    <a href="{{ path('user_index') }}" class=" btn btn-primary" style="font-size: 21px;"><i
+                class="fa fa-undo" aria-hidden="true"></i></a>
+
 
 {% endblock %}

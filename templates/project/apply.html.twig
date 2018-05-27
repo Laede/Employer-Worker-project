@@ -24,10 +24,10 @@
             <td>
                 <form action="" method="post">
                     {% if apply.status != 'accepted' %}
-                    <button type="submit" name="status" value="1" class="btn btn-success">Accept</button>
+                    <button type="submit" name="status" value="1" class="btn btn-success btn-sm">Accept</button>
                     {% endif %}
                     {% if apply.status != 'declined' %}
-                    <button type="submit" name="status" value="0" class="btn btn-danger">Decline</button>
+                    <button type="submit" name="status" value="0" class="btn btn-danger btn-sm">Decline</button>
                     {% endif %}
                 </form>
             </td>
@@ -37,5 +37,6 @@
 
     {% include 'project/messages.html.twig' with {'messages': apply.messages} %}
 
-    <a href="{{ path('project_show', {'id': apply.project.id}) }}">back to project</a>
+    <a href="{{ path('project_show', {'id': apply.project.id}) }}" class=" btn btn-primary" style="font-size: 21px;"><i
+                class="fa fa-undo" aria-hidden="true"></i></a>
 {% endblock %}
