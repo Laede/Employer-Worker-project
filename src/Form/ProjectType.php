@@ -7,6 +7,7 @@ use App\Entity\Skills;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Date;
@@ -37,11 +38,11 @@ class ProjectType extends AbstractType
                 ],
                 'html5' => false,
                 'data' => new \DateTime("+5 day")])
-            ->add('skills', EntityType::class, [
-                'class' => Skills::class,
-                'multiple' => true,
-                'expanded' => true,
-                'choice_label' => 'name']);
+            ->add('skills_string', TextType::class, [
+                'label' => 'Skills',
+                'attr' => ['class' => 'skills-input']
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

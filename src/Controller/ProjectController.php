@@ -11,6 +11,7 @@ use App\Repository\ProjectRepository;
 use App\Service\ApplyService;
 use App\Service\MessagesService;
 use App\Service\CV;
+use App\Service\SkillsService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ class ProjectController extends Controller
     /**
      * @Route("/new", name="project_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, SkillsService $skillsService): Response
     {
         $project = new Project();
 
@@ -45,6 +46,7 @@ class ProjectController extends Controller
             $project->setUser($user);
 
             $em = $this->getDoctrine()->getManager();
+            $skillsService->proceedSkills($project, $em);
 
             $em->persist($project);
             $em->flush();
@@ -110,14 +112,17 @@ class ProjectController extends Controller
     /**
      * @Route("/{id}/edit", name="project_edit", methods="GET|POST")
      */
-    public function edit(Request $request, Project $project): Response
+    public function edit(Request $request, Project $project, SkillsService $skillsService): Response
     {
         $this->denyAccessUnlessGranted('is_project_author', $project);
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em = $this->getDoctrine()->getManager();
+            $skillsService->proceedSkills($project, $em);
+
+            $em->flush();
 
             return $this->redirectToRoute('project_edit', ['id' => $project->getId()]);
         }

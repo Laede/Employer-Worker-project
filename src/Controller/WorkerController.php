@@ -11,6 +11,7 @@ use App\Repository\ProjectRepository;
 use App\Repository\SkillsRepository;
 use App\Service\CV;
 use App\Service\MessagesService;
+use App\Service\SkillsService;
 use App\Service\WorkerService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +33,7 @@ class WorkerController extends Controller
     /**
      * @Route("/edit/", name="worker_edit", methods="GET|POST")
      */
-    public function edit(Request $request, CV $cvUploader): Response
+    public function edit(Request $request, CV $cvUploader, SkillsService $skillsService): Response
     {
         $user = $this->getUser();
         $worker = $this->workerService->getWorker($user);
@@ -52,8 +53,11 @@ class WorkerController extends Controller
             } else {
                 $worker->setCv($oldFile);
             }
-            $this->getDoctrine()->getManager()
-                ->flush();
+
+            $em = $this->getDoctrine()->getManager();
+            $skillsService->proceedSkills($worker, $em);
+
+            $em->flush();
 
             $this->addFlash('success', 'Profile updated!');
 
@@ -90,7 +94,7 @@ class WorkerController extends Controller
     public function projects(ProjectRepository $projectRepository, Request $request, SkillsRepository $skillsRepository): Response
     {
         $user = $this->getUser();
-        $skills = $skillsRepository->findAll();
+        $skills = $skillsRepository->findBy([],['name'=>'asc']);
         $filters = $this->workerService->proceedFilters($request, $user);
         $projects = $projectRepository->findByFilters($filters);
 

@@ -64,6 +64,8 @@ class Project
      */
     private $applies;
 
+    private $skills_string;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -185,6 +187,13 @@ class Project
         return $this;
     }
 
+    public function clearSkills(): self
+    {
+        $this->skills = new ArrayCollection();
+
+        return $this;
+    }
+
     /**
      * @return Collection|Apply[]
      */
@@ -212,6 +221,24 @@ class Project
                 $apply->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSkillsString($from = 'entity')
+    {
+        if($from !== 'entity')
+            return $this->skills_string;
+        $skills = [];
+        foreach($this->getSkills() as $skill) {
+            $skills[] = $skill->getName();
+        }
+        return implode(',',$skills);
+    }
+
+    public function setSkillsString(String $skillsString)
+    {
+        $this->skills_string = $skillsString;
 
         return $this;
     }

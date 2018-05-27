@@ -18,4 +18,14 @@ class SkillsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Skills::class);
     }
+
+    public function findByNames($names)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.name IN (:names)')
+            ->setParameter('names', $names)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

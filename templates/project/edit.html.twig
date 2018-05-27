@@ -5,6 +5,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('build/js/datepicker.js') }}"></script>
+    <script src="{{ asset('build/js/skills.js') }}"></script>
 {% endblock %}
 {% block body %}
     <h1>Edit Project</h1>
@@ -14,4 +15,9 @@
     <a href="{{ path('project_index') }}" class="card-link btn btn-primary" style="font-size: 21px;"><i
                 class="fa fa-undo" aria-hidden="true"></i></a>
 
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('build/css/skills.css') }}"/>
+    {{ parent() }}
 {% endblock %}

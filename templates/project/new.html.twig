@@ -5,6 +5,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('build/js/datepicker.js') }}"></script>
+    <script src="{{ asset('build/js/skills.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -13,4 +14,9 @@
     {{ include('project/_form.html.twig') }}
 
     <a href="{{ path('project_index') }}">back to list</a>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('build/css/skills.css') }}"/>
+    {{ parent() }}
 {% endblock %}

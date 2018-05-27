@@ -11,3 +11,13 @@
                 class="fa fa-undo" aria-hidden="true"></i></a>
 
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('build/js/skills.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ asset('build/css/skills.css') }}"/>
+{{ parent() }}
+{% endblock %}

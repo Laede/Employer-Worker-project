@@ -2,12 +2,11 @@
 
 namespace App\Form;
 
-use App\Entity\Skills;
 use App\Entity\Worker;
 
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,11 +20,9 @@ class WorkerType extends AbstractType
                 'required' => false,
                 'data_class' => null,
             ])
-            ->add('skills', EntityType::class, [
-                'class' => Skills::class,
-                'multiple' => true,
-                'expanded' => true,
-                'choice_label' => 'name',
+            ->add('skills_string', TextType::class, [
+                'label' => 'Skills',
+                'attr' => ['class' => 'skills-input']
             ])
         ;
     }

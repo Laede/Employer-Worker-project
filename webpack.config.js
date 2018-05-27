@@ -34,6 +34,16 @@ Encore
     // Css
     .addStyleEntry('css/app', './assets/css/app.scss')
 
+    .addEntry('js/skills', [
+        'bootstrap-tagsinput/src/bootstrap-tagsinput.js',
+        'typeahead-js-commonjs',
+        './assets/js/skills.js',
+    ])
+    .addStyleEntry('css/skills', [
+        'bootstrap-tagsinput/src/bootstrap-tagsinput.css',
+        'bootstrap-tagsinput/src/bootstrap-tagsinput-typeahead.css',
+        './assets/css/skills.scss',
+    ])
 
     // Using SASS
     .enableSassLoader()
