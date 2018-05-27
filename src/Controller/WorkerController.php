@@ -39,6 +39,7 @@ class WorkerController extends Controller
         $worker = $this->workerService->getWorker($user);
 
         $oldFile = $worker->getCv();
+        $oldSkills = $worker->getSkillsString(null);
 
         $form = $this->createForm(WorkerType::class, $worker);
         $form->handleRequest($request);
@@ -55,7 +56,9 @@ class WorkerController extends Controller
             }
 
             $em = $this->getDoctrine()->getManager();
-            $skillsService->proceedSkills($worker, $em);
+            if($oldSkills !== $worker->getSkillsString(null)){
+                $skillsService->proceedSkills($worker, $em);
+            }
 
             $em->flush();
 

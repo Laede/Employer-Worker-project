@@ -115,12 +115,15 @@ class ProjectController extends Controller
     public function edit(Request $request, Project $project, SkillsService $skillsService): Response
     {
         $this->denyAccessUnlessGranted('is_project_author', $project);
+        $oldSkills = $project->getSkillsString(null);
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $skillsService->proceedSkills($project, $em);
+            if($oldSkills !== $project->getSkillsString(null)) {
+                $skillsService->proceedSkills($project, $em);
+            }
 
             $em->flush();
 
